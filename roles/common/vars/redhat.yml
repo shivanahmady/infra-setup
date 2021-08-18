@@ -1,0 +1,14 @@
+python_dependencies:
+  - gcc
+  - python-dev
+  - python-setuptools
+  - python-software-properties
+
+
+package_dependencies: []
+
+ssh_package: openssh-server
+
+ssh_service: ssh
+
+ssh_config: /etc/ssh/sshd_config

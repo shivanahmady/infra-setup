@@ -1,0 +1,10 @@
+ec2_keypair: "HIDDEN"
+ec2_security_group: "HIDDEN"
+ec2_instance_type: "m3.medium"
+ec2_image: "ami-xxxxxxxx"
+ec2_subnet_ids: ["subnet-HIDDEN", "subnet-HIDDEN", "subnet-HIDDEN"]
+ec2_region: "us-east-1"
+ec2_tag_Name: "Testserver"
+ec2_tag_Type: "Testserver"
+ec2_tag_Environment: "production"
+ec2_volume_size: 16

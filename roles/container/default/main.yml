@@ -1,0 +1,30 @@
+registry_scheme: https
+registry_url: ""
+registry_type: aws-ecr
+registry_region: us-east-1
+registry_username: ""
+registry_password: ""
+create_containers: 1
+default_container_image: ubuntu
+image_team: rootdevs
+image_project: reliability-interview-container
+image_tag: "201805"
+container: rootdevs/reliability-interview-container:201805
+default_container_command: sleep 1d
+container_restart_policy: on-failure
+
+docker_project_image: "{{ registry_hostname }}/{{ registry_container }}:{{ project_tag }}"
+docker_project_name: "{{ project_name }}-{{ project_tag }}"
+docker_project_home: "/opt/{{ docker_project_name }}"
+docker_project_command:
+docker_project_env:
+docker_project_directory_mode: "0755"
+docker_project_directory_owner: root
+docker_project_directory_group: root
+docker_project_directory_volumes: []
+docker_project_file_volumes: []
+docker_project_ports: []
+docker_project_network_mode:
+docker_project_networks: []
+docker_project_restart: no
+docker_project_remove_existing_container: yes

@@ -1,0 +1,17 @@
+## NOT USED
+localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+; [function:children]
+;  web
+;  database
+; ; loadbalancer
+; ; region
+
+; [region:children]
+; ; region01
+; environments
+
+; [environments:children]
+; dev
+; ; stage
+; ; prod

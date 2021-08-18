@@ -1,0 +1,30 @@
+python_dependencies:
+  - gcc
+  - python-dev
+  - python-setuptools
+  - python-software-properties
+
+system_packages:
+  - curl
+  - vim
+  - git
+  - tree
+  - build-essential
+  - wget
+  - apt-transport-https
+  - software-properties-common
+  - boto
+  - boto3
+  - pip3
+  - ca-certificates
+  - gzip
+  - gnupg-agent
+
+
+package_dependencies: []
+
+ssh_package: openssh-server
+
+ssh_service: ssh
+
+ssh_config: /etc/ssh/sshd_config

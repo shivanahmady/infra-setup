@@ -1,0 +1,32 @@
+---
+- name: Registry LOG IN
+  docker_login:
+    registry: "{{ registry_scheme }}://{{ registry_url }}"
+    username: "{{ registry_username }}"
+    password: "{{ registry_password }}"
+    reauthorize: yes
+  when: registry_username | length > 0 and registry_password | length > 0
+
+- name: PREPARE | VERIFY SERVICES STARTED
+  import_tasks: prep.yml
+  vars:
+    example: example
+
+- name: Run/Start docker container
+  docker_container:
+    image: "{{ registry_url }}/{{ image_team }}/{{ image_project }}:{{ image_tag }}"
+    name: "{{ container_name }}"
+    state: started
+    restart_policy: on-failure
+    exposed_ports:
+      - "4567"
+    ports:
+      - "80:80"
+
+    ##################################################################
+    # Docker Registery Authentication (**SESSION ENDED**)
+
+- name: Docker Registery | LOG OUT
+  docker_login:
+    registry: "{{ registry_scheme }}://{{ registry_url }}"
+    state: absent

@@ -1,0 +1,65 @@
+---
+- name: SITE.YML | VARIABLES
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+    env: dev
+  tasks:
+    - include_vars:
+        file: "{{ item }}"
+      with_items:
+        - "../environments/000_cross_env_vars.yml"
+        - "environments/{{ env }}/group_vars/all.yml"
+        - "environments/{{ env }}/group_vars/env_only.yml"
+        - "environments/{{ env }}/group_vars/{{ function }}.yml"
+
+- name: SITE.YML | COMMON ROLE | SET UP (INSTALL DEPENDENCIES)
+  hosts: all
+  gather_facts: yes
+  #remote_user: "{{ remote_user }}"
+  #become_user: root
+  roles:
+    - common
+  vars_files:
+    - ""
+##ansible_os_family
+
+# - name: SITE.YML | WEB ROLE
+#   hosts: webservers
+#   remote_user: root
+#   roles:
+#     - web
+
+# - name: SITE.YML | DB ROLE |
+#   hosts: databases
+#   remote_user: root
+#   roles:
+#     - database
+
+- name: SITE.YML | CONTAINER ROLE | DOCKER CONTAINER START | PULL & RUN APP CONTAINER
+  hosts: ec2
+  gather_facts: yes
+  connection: ssh
+  remote_user: root
+  roles:
+    - container
+# - name: verify
+#   command: "curl {{host}}:4567"
+
+# - name: PROVISION AWS EC2 INSTANCE / ADD TO HOSTS
+#   hosts: localhost
+#   connection: local
+#   gather_facts: yes
+#   # become_user: root
+#   pre_tasks:
+#     - include_vars: group_vars/ec2.yml
+#   import_tasks: provision.yml
+# - name: CONFIG INSTANCE
+#   hosts: ec2
+#   gather_facts: yes
+#   connection: ssh
+#   user: root
+#   remote_user: root
+#   roles:
+#     - provision

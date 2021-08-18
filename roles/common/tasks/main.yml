@@ -1,0 +1,38 @@
+---
+- name: get the date
+  shell: "date"
+  register: date
+
+- name: gather os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+    - ../vars/{{ ansible_distribution | lower }}.yml
+    - ../vars/{{ ansible_os_family | lower }}.yml
+    - "../vars/{{ ansible_os_family }}.yml"
+    - "../vars/default.yml"
+  tags: vars
+
+- name: install dependencies
+  action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+  with_items: "{{ package_dependencies }}"
+  tags: install
+
+- name: Install the correct web server for RHEL / YUM
+  include: redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Install the correct web server for Debian/UBUNTU / APT
+  include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+#Install docker module to use docker command
+- name: Installing Docker SDK for python3
+  command: pip3 install docker
+
+- name: Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes

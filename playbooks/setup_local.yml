@@ -1,0 +1,76 @@
+---
+- name: VARIABLES
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+    env: dev
+  tasks:
+    - name: 000_init_000
+      command: echo "---> 000_init_000 <---"
+    - name: Include Variables
+      include_vars:
+        file: "{{ item }}"
+      with_items:
+        - "../environments/000_cross_env_vars.yml"
+        - "../environments/{{ env }}/group_vars/all.yml"
+        - "../environments/{{ env }}/group_vars/env_only.yml"
+      tags: Include_Variables
+    - name: HOME DIRECTORY
+      command: ls ..
+      register: home_dir
+    - name: HOME DIRECTORY
+      debug: var=home_dir.stdout_lines
+    - name: info
+      debug: var=info.version,info.progression
+    - name: env
+      debug: msg="{{ env }}"
+    - name: ansible_os_family
+      debug: msg="{{ ansible_os_family }}"
+
+- name: VERIFY
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+    env: dev
+    http_port: 80
+    max_clients: 3
+    package_manager: package
+  tasks:
+    - name: PING
+      ping:
+      remote_user: sa
+    - name: VIRTUAL ENV
+      shell: source ../../bin/activate
+    - debug: msg="VIRTUALENV SET"
+    - name: VIRTUALENV | BREW
+      homebrew:
+        state: present
+      when: package_manager == 'brew'
+    - name: VIRTUALENV | BREW | Packages
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+        - gnupg
+      when: package_manager == 'brew'
+    - name: VIRTUALENV | PIP
+      pip:
+        name: pip
+        state: present
+      when: package_manager == 'pip'
+    - name: VIRTUALENV | PACKAGES
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+        - gnupg
+        - docker
+      when: package_manager == 'package'
+    - name: ensure apache is running (and enable it at boot)
+      service: 
+        name: docker 
+        state: started
