@@ -3,8 +3,6 @@ node_modules/
 out/
 .vscode-test/
 test/testFixture/.vscode
-ansible.log
-ansible*
 venv*
 
 # Byte-compiled / optimized / DLL files
@@ -65,7 +63,6 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
